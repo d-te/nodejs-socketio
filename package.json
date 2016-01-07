@@ -14,6 +14,7 @@
     "express-session": "^1.12.1",
     "jade": "~1.11.0",
     "less-middleware": "2.0.x",
+    "mongoose": "^4.3.4",
     "promise": "^7.1.1",
     "pure-validator": "^0.1.7",
     "pure-validator-node": "^0.1.8",

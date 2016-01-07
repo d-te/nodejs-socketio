@@ -4,7 +4,9 @@ var favicon = require('serve-favicon');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var config = require('./configs/config');
+var mongoose = require('mongoose');
 
+var models = require('./models/models');
 var routeConfigurer = require('./routes/routes_config');
 
 var app = express();
@@ -21,6 +23,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(require('less-middleware')(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
+
+mongoose.connect(config.db);
 
 routeConfigurer.configRoutes(app);
 

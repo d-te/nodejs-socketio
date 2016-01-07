@@ -1,4 +1,5 @@
 "use strict";
+var api = require('./api/api');
 var web = require('./web/web');
 
 module.exports.configRoutes = function(app, passport) {
@@ -18,4 +19,7 @@ module.exports.configRoutes = function(app, passport) {
 
 	//Web routes
 	app.use('/', web);
+
+	//Api routes
+	app.use('/api/', api);
 }
