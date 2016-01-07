@@ -1,10 +1,13 @@
 'use strict';
 var _ = require('underscore');
+var NodeValidator = require('pure-validator-node');
+var validator = require('pure-validator');
 
 class UserController {
 
 	constructor(repository) {
 		this._repository = repository;
+		this.validator = new NodeValidator(validator);
 	}
 
 	getRepository() {
@@ -13,11 +16,23 @@ class UserController {
 
 	index(req, res, next) {
 		var self = this;
+
+		this.validator.check(req, {
+			'query.email': ['optional', 'isEmail'],
+			'query.name': ['optional', 'isTypeString'],
+			'query.limit': ['optional', {'isInt': {'min': 1, 'max': 100}}],
+			'query.order_by': ['optional', 'isTypeString'],
+			'query.order_direction': ['optional', {'isIn': ['asc', 'desc']}],
+		});
+		if (this.validator.errors) {
+			return res.status(400).json(this.validator.errors);
+		}
+
 		var limit = parseInt(req.query.limit) || 10;
 		var offset = parseInt(req.query.offset) || 0;
 		var order = {
-			by: req.query['order.by'],
-			direction: req.query['order.direction'],
+			by: req.query['order_by'],
+			direction: req.query['order_direction'],
 		};
 
 		var criterias = _.omit(req.query, ['limit', 'offset', 'order']);
@@ -34,9 +49,15 @@ class UserController {
 	}
 
 	show(req, res, next) {
+		this.validator.check(req, {
+			'params.id': ['isMongoId']
+		});
+		if (this.validator.errors) {
+			return res.status(400).json(this.validator.errors);
+		}
+
 		var self = this;
 		var id = req.params.id;
-
 		this
 			.getRepository()
 			.getEntity(id, function(err, entity) {
@@ -52,8 +73,15 @@ class UserController {
 	}
 
 	create(req, res, next) {
-		var self = this;
+		this.validator.check(req, {
+			'body.email': ['isNotEmptyString', 'isEmail'],
+			'query.name': ['isNotEmptyString', 'isTypeString'],
+		});
+		if (this.validator.errors) {
+			return res.status(400).json(this.validator.errors);
+		}
 
+		var self = this;
 		var entity = req.body;
 
 		this
@@ -67,6 +95,15 @@ class UserController {
 	}
 
 	update(req, res, next) {
+		this.validator.check(req, {
+			'params.id': ['isMongoId'],
+			'body.email': ['isNotEmptyString', 'isEmail'],
+			'query.name': ['isNotEmptyString', 'isTypeString'],
+		});
+		if (this.validator.errors) {
+			return res.status(400).json(this.validator.errors);
+		}
+
 		var self = this;
 		var id = req.params.id;
 
@@ -84,6 +121,13 @@ class UserController {
 	}
 
 	destroy(req, res, next) {
+		this.validator.check(req, {
+			'params.id': ['isMongoId']
+		});
+		if (this.validator.errors) {
+			return res.status(400).json(this.validator.errors);
+		}
+
 		var self = this;
 		var id = req.params.id;
 
