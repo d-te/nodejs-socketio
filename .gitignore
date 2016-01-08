@@ -29,3 +29,6 @@ node_modules
 
 public/build/css/*.css
 public/build/js/*.js
+
+# Bower components directory
+bower_components

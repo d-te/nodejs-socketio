@@ -1,0 +1,19 @@
+{
+  "name": "nodejs-socketio",
+  "version": "0.0.1",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.4.8",
+    "angular-socket-io": "~0.7.0",
+    "angular-local-storage": "~0.2.3",
+    "angular-resource": "~1.4.8",
+    "angular-route": "~1.4.8",
+    "angular-sanitize": "~1.4.8"
+  }
+}
