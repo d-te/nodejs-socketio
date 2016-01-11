@@ -5,18 +5,27 @@ var validator = require('pure-validator');
 
 class SocketController {
 
-	constructor(repository, socket) {
-		this._repository = repository;
+	constructor(userRepository, socket, clientsRepository) {
+		this._userRepository = userRepository;
 		this._socket = socket;
+		this._clientsRepository = clientsRepository;
 		this.validator = new NodeValidator(validator);
 	}
 
-	getRepository() {
-		return this._repository;
+	getUserRepository() {
+		return this._userRepository;
+	}
+
+	getClientsRepository() {
+		return this._clientsRepository;
 	}
 
 	getSocket() {
 		return this._socket;
+	}
+
+	content(socket) {
+		//TODO
 	}
 
 	login(data) {

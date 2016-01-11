@@ -4,21 +4,23 @@ var mongoose = require('mongoose');
 var User = mongoose.model('User');
 var Repository = require('../../repositories/user').Repository;
 var Controller = require('../../controllers/socket').Controller;
+var ClientsRepository = require('../../repositories/clients').Repository;
+var clientsRepository = new ClientsRepository();
+var userRepository = new Repository(User);
 
 module.exports = function (socket) {
-	var repository = new Repository(User);
-	var controller = new Controller(repository, socket);
+	var controller = new Controller(userRepository, socket, clientsRepository);
 
 	socket.emit('init', {
 		'message': 'hi'
 	});
 
-/*	socket.broadcast.emit('user:join', {
+	/*socket.broadcast.emit('user:join', {
 		name: name
 	});*/
 
-	socket.on('user:login', function (data) {
-		controller.login(data);
+	socket.on('user:login', function (user) {
+		controller.login(user);
 	});
 
 	socket.on('send:message', function (data) {

@@ -4,20 +4,28 @@ app.controller('AuthController', [
 	'$scope',
 	'$rootScope',
 	'$location',
-	'socket',
 	'localStorageService',
-	function($scope, $rootScope, $location, socket, localStorageService){
+	'AuthService',
+	'SocketService',
+	function($scope, $rootScope, $location, localStorageService, AuthService, SocketService){
 		$scope.user = localStorageService.get('user') || {};
 
 		$scope.login = function(form) {
 			if (form.$valid) {
-				socket.emit('user:login', $scope.user);
+				AuthService
+					.login($scope.user)
+					.then(function(user){
+							$rootScope.loggedUser = user;
+
+							SocketService.init();
+
+							$location.path('/chat');
+						},
+						function(reason){
+							console.log(reason);
+						}
+					);
 			}
 		};
-
-		socket.on('user:id', function(data){
-			localStorageService.set('user', $scope.user);
-			$location.path('/chat');
-		});
 	}
 ]);

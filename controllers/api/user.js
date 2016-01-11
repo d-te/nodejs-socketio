@@ -31,20 +31,20 @@ class UserController {
 		var limit = parseInt(req.query.limit) || 10;
 		var offset = parseInt(req.query.offset) || 0;
 		var order = {
-			by: req.query['order_by'],
-			direction: req.query['order_direction'],
+			by: req.query.order_by,
+			direction: req.query.order_direction,
 		};
 
 		var criterias = _.omit(req.query, ['limit', 'offset', 'order']);
 
 		this
 			.getRepository()
-			.getEntities(criterias, limit, offset, order, function(err, entities) {
-				if (err) {
-					return res.status(400).json(err.message);
-				}
-
+			.getEntities(criterias, limit, offset, order)
+			.then(function(entities){
 				res.status(200).json(entities);
+			})
+			.catch(function(err){
+				res.status(400).json(err.message);
 			});
 	}
 
@@ -60,15 +60,16 @@ class UserController {
 		var id = req.params.id;
 		this
 			.getRepository()
-			.getEntity(id, function(err, entity) {
-				if (err) {
-					return res.status(400).json(err.message);
-				}
-				if (entity === null) {
-					return res.status(404).json('Not Found');
-				}
-
+			.getEntity(id, true)
+			.then(function(entity){
 				res.status(200).json(entity);
+			})
+			.catch(function(err){
+				var status = 400;
+				if (err.message === 'Not found') {
+					status = 404;
+				}
+				res.status(status).json(err.message);
 			});
 	}
 
@@ -86,11 +87,12 @@ class UserController {
 
 		this
 			.getRepository()
-			.createEntity(entity, function(err, entity) {
-				if (err) {
-					return res.status(400).json(err.message);
-				}
-				res.status(200).json(entity.id);
+			.createEntity(entity)
+			.then(function(entity){
+				res.status(200).json(entity);
+			})
+			.catch(function(err){
+				res.status(400).json(err.message);
 			});
 	}
 
@@ -109,14 +111,16 @@ class UserController {
 
 		this
 			.getRepository()
-			.updateEntity(id, req.body, function(err, entity) {
-				if (err) {
-					return res.status(400).json(err.message);
-				}
-				if (entity === null) {
-					return res.status(404).json('Not Found');
-				}
+			.updateEntity(id, req.body)
+			.then(function(entity){
 				res.status(200).json('saved');
+			})
+			.catch(function(err){
+				var status = 400;
+				if (err.message === 'Not found') {
+					status = 404;
+				}
+				res.status(status).json(err.message);
 			});
 	}
 
@@ -133,12 +137,12 @@ class UserController {
 
 		this
 			.getRepository()
-			.destroyEntity(id, function(err) {
-				if (err) {
-					return res.status(400).json(err.message);
-				}
-
+			.destroyEntity(id)
+			.then(function(entity){
 				res.status(200).json('deleted');
+			})
+			.catch(function(err){
+				res.status(400).json(err.message);
 			});
 	}
 

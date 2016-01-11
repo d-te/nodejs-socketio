@@ -7,7 +7,9 @@ var app = angular.module(
 		'btford.socket-io',
 		'LocalStorageModule',
 
+		'ChatApp.AuthService',
 		'ChatApp.SocketService',
+
 		'ChatApp.AuthController',
 		'ChatApp.ChatController',
 	]

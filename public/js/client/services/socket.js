@@ -1,11 +1,25 @@
 var app = angular.module('ChatApp.SocketService', []);
 
-app.factory('socket', function (socketFactory) {
-    var myIoSocket = io.connect();
+app.factory('SocketService', function (socketFactory) {
+	var ioSocket;
+	var socket;
 
-    var socket = socketFactory({
-        ioSocket: myIoSocket
-    });
+	var factory = {
+		init: function() {
+			ioSocket = io.connect();
 
-    return socket;
+			socket = socketFactory({
+				ioSocket: myIoSocket
+			});
+		},
+		io: function () {
+			if (!socket) {
+				factory.init();
+			}
+			return socket;
+		}
+
+	};
+
+	return factory;
 });

@@ -1,6 +1,7 @@
 'use strict';
 
 var _ = require('underscore');
+var Promise = require('promise');
 
 class UserRepository {
 
@@ -12,29 +13,68 @@ class UserRepository {
 		return this._model;
 	}
 
-	getEntity(id, cb) {
-		this
-			.getModel()
-			.findById(id, function (err, entity) {
-  				cb(err, entity);
-			});
+	getEntity(id, errorIfNull) {
+		var self = this;
+		var promise = new Promise(function (resolve, reject) {
+			self
+				.getModel()
+				.findById(id, function (err, entity) {
+					if (err) {
+						reject(err);
+					} else if (true === errorIfNull && null === entity) {
+						reject(new Error('Not found'));
+					} else {
+						resolve(entity);
+					}
+				});
+		});
+
+		return promise;
 	}
 
-	getEntities(criterias, limit, offset, order, cb) {
+	getEntityByEmail(email, errorIfNull) {
+		var self = this;
+		var promise = new Promise(function (resolve, reject) {
+			self
+				.getModel()
+				.findOne({ email: email }, function (err, entity) {
+					if (err) {
+						reject(err);
+					} else if (true === errorIfNull && null === entity) {
+						reject(new Error('Not found'));
+					} else {
+						resolve(entity);
+					}
+				});
+		});
+
+		return promise;
+	}
+
+	getEntities(criterias, limit, offset, order) {
+		var self = this;
 		limit = parseInt(limit) || 10;
 		offset = parseInt(offset) || 0;
 		var conditions = this.processCriterias(criterias);
 		var orderCondition = this.processOrder(order);
 
-		this
-			.getModel()
-			.find(conditions)
-			.limit(limit)
-			.skip(offset)
-			.sort(orderCondition)
-			.exec(function(err, entities){
-				cb(err,entities);
-			});
+		var promise = new Promise(function (resolve, reject) {
+			self
+				.getModel()
+				.find(conditions)
+				.limit(limit)
+				.skip(offset)
+				.sort(orderCondition)
+				.exec(function(err, entities){
+					if (err) {
+						reject(err);
+					} else {
+						resolve(entities);
+					}
+				});
+		});
+
+		return promise;
 	}
 
 	processCriterias(criterias) {
@@ -53,37 +93,62 @@ class UserRepository {
 	}
 
 	createEntity(fields, cb) {
-		this
-			.getModel()
-			.create(fields, function(err, entity) {
-				cb(err, entity);
-			});
+		var self = this;
+		var promise = new Promise(function (resolve, reject) {
+			self
+				.getModel()
+				.create(fields, function(err, entity) {
+					if (err) {
+						reject(err);
+					} else {
+						resolve(entity);
+					}
+				});
+		});
+
+		return promise;
 	}
 
 	updateEntity(id, fields, cb) {
 		var self = this;
-		fields = _.omit(fields, ['id', 'createdAt', 'updatedAt']);
-
-		this
-			.getModel()
-			.findById(id, function (err, entity) {
-				if (entity) {
+		var promise = new Promise(function (resolve, reject) {
+			fields = _.omit(fields, ['id', 'createdAt', 'updatedAt']);
+			self
+				.getEntity(id, true)
+				.then(function(entity){
 					_.extend(entity, fields);
 					entity.save(function(err,entity){
-						cb(err, entity);
+						if (err) {
+							reject(err);
+						} else {
+							resolve(entity);
+						}
 					});
-				} else {
-					cb(err, entity);
-				}
-			});
+				})
+				.catch(function(err){
+					reject(err);
+				});
+		});
+
+		return promise;
+
 	}
 
 	destroyEntity(id, cb) {
-		this
-			.getModel()
-			.remove({ _id: id }, function(err, email) {
-				cb(err, email);
-			});
+		var self = this;
+		var promise = new Promise(function (resolve, reject) {
+			self
+				.getModel()
+				.remove({ _id: id }, function(err, email) {
+					if (err) {
+						reject(err);
+					} else {
+						resolve(id);
+					}
+				});
+		});
+
+		return promise;
 	}
 }
 
