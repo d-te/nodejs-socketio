@@ -30,6 +30,10 @@ class SocketController {
 	}
 
 	connect() {
+		if (!this.getUser()) {
+			this.getSocket().disconnect();
+			return;
+		}
 
 		this.getClientsRepository().addClient(this.getSocket(), this.getUser());
 
@@ -57,9 +61,10 @@ class SocketController {
 	}
 
 	disconnect() {
-		this.getClientsRepository().removeClient(this.getSocket());
-
-		this.getSocket().broadcast.emit('user:left', this.getUser());
+		if (this.getUser()) {
+			this.getClientsRepository().removeClient(this.getSocket());
+			this.getSocket().broadcast.emit('user:left', this.getUser());
+		}
 	}
 }
 
