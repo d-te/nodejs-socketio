@@ -11,6 +11,8 @@ app.factory('SocketService', [
 			init: init,
 			getSocket: getSocket,
 			sendMessage: sendMessage,
+			sendStatistics: sendStatistics,
+			sendEvent: sendEvent,
 		};
 
 		function init() {
@@ -38,6 +40,20 @@ app.factory('SocketService', [
 
 		function sendMessage(message) {
 			this.getSocket().emit('send:message', message);
+		}
+
+		function sendStatistics(data) {
+			this.getSocket().emit('send:statistics', data);
+		}
+
+		function sendEvent(component, event, value) {
+			var data = {
+				type: 'event',
+				action: component + event,
+				value: value
+			};
+
+			this.sendStatistics(data);
 		}
 
 		return factory;

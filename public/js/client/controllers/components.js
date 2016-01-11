@@ -5,6 +5,8 @@ app.controller('ComponentsController', [
 	'$rootScope',
 	'SocketService',
 	function($scope, $rootScope, SocketService){
-		console.log('components');
+		$scope.statistics = function(component, event, value) {
+			SocketService.sendEvent(component, event, value);
+		};
 	}
 ]);

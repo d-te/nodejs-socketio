@@ -43,7 +43,7 @@ app.service('SocketListener', [
 		}
 
 		function onInit(data) {
-			console.log('onInit', data);
+			//TODO get list of online users
 		}
 
 		function onUserJoin(user) {

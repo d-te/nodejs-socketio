@@ -1,15 +1,17 @@
 'use strict';
 var mongoose = require('mongoose');
 
-var User = mongoose.model('User');
-var Repository = require('../../repositories/user').Repository;
+var Statistics = mongoose.model('Statistics');
+var StatisticsRepository = require('../../repositories/statistics').Repository;
+
 var Controller = require('../../controllers/socket').Controller;
 var ClientsRepository = require('../../repositories/clients').Repository;
+
 var clientsRepository = new ClientsRepository();
-var userRepository = new Repository(User);
+var statisticsRepository = new StatisticsRepository(Statistics);
 
 module.exports = function (socket) {
-	var controller = new Controller(userRepository, socket, clientsRepository);
+	var controller = new Controller(statisticsRepository, socket, clientsRepository);
 
 	controller.connect();
 
@@ -19,24 +21,13 @@ module.exports = function (socket) {
 
 	socket.on('send:command', function (data) {
 		controller.sendCommand(data);
-/*		socket.broadcast.emit('send:command', {
-			user: name,
-			text: data.command
-		});*/
 	});
 
-	socket.on('send:event', function (data) {
-		controller.sendEvent(data);
-		/*socket.broadcast.emit('send:event', {
-			user: name,
-			text: data.command
-		});*/
+	socket.on('send:statistics', function (data) {
+		controller.sendStatistics(data);
 	});
 
 	socket.on('disconnect', function () {
 		controller.disconnect();
-		/*socket.broadcast.emit('user:left', {
-			name: name
-		});*/
 	});
 };

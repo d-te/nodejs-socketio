@@ -5,16 +5,16 @@ var validator = require('pure-validator');
 
 class SocketController {
 
-	constructor(userRepository, socket, clientsRepository) {
-		this._userRepository = userRepository;
+	constructor(statisticsRepository, socket, clientsRepository) {
+		this._statisticsRepository = statisticsRepository;
 		this._socket = socket;
 		this._clientsRepository = clientsRepository;
 		this.validator = new NodeValidator(validator);
 		this._user = this.getSocket().request.session.loggedUser;
 	}
 
-	getUserRepository() {
-		return this._userRepository;
+	getStatisticsRepository() {
+		return this._statisticsRepository;
 	}
 
 	getClientsRepository() {
@@ -56,8 +56,12 @@ class SocketController {
 		//TODO
 	}
 
-	sendEvent(data) {
-		//TODO
+	sendStatistics(data) {
+		//TODO add log
+		data._user = this.getUser()._id;
+		this
+			.getStatisticsRepository()
+			.createEntity(data);
 	}
 
 	disconnect() {

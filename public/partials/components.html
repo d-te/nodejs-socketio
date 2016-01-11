@@ -8,4 +8,38 @@
 	</div>
 </div>
 
-<b>Components</b>
+<div class="row">
+	<div class="col-md-8 col-md-offset-2">
+		<div class="account-wall ">
+			<div class="radio">
+				<label>
+					<input type="radio" name="radioOption1" id="radioOption1" value="option1" ng-model="radio1" ng-change="statistics('radioOption1', 'change', radio1)">
+					Option1
+				</label>
+			</div>
+			<div class="checkbox">
+				<label>
+					<input type="checkbox" name="checkbox1" ng-model="checkbox1" ng-change="statistics('checkbox1', 'change', checkbox1)"> Check me out
+				</label>
+			</div>
+			<div class="checkbox">
+				<label>
+					<input type="checkbox" name="checkbox2" ng-model="checkbox2" ng-change="statistics('checkbox2', 'change', checkbox2)"> Check me out
+				</label>
+			</div>
+			<div class="checkbox">
+				<label>
+					<input type="checkbox" name="checkbox3" ng-model="checkbox3" ng-change="statistics('checkbox3', 'change', checkbox3)"> Check me out
+				</label>
+			</div>
+			<select class="form-control" name="select1" ng-model="select1" ng-change="statistics('select1', 'change', select1)">
+				<option>1</option>
+				<option>2</option>
+				<option>3</option>
+				<option>4</option>
+				<option>5</option>
+			</select>
+			<button type="button" class="btn btn-default" name="button1" ng-click="statistics('button1', 'click')">Button</button>
+		</div>
+	</div>
+</div>
