@@ -1,1 +1,29 @@
-<b>TEST</b>
+<div class="row">
+	<div class="col-md-8 col-md-offset-2">
+		<ul class="list-inline">
+			<li><a href="#/chat">Chat</a></li>
+			<li><a href="#/actions">Actions</a></li>
+			<li><a href="#/components">Components</a></li>
+		</ul>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-8 col-md-offset-2">
+		<div class="account-wall chat">
+			<h2>{{user.name}} ({{user.email}})</h2>
+			<div class="overflowable">
+				<p ng-repeat="m in messages" >
+					<span ng-if="m.user" class="user">{{m.user.name}}:</span>{{m.text}}
+				</p>
+			</div>
+			<form name="chatForm" class="form-horizontal" novalidate>
+				<div class="input-group">
+					<input type="text" class="form-control" required ng-model="message">
+					<span class="input-group-btn">
+						<button class="btn btn-primary" type="button" ng-click="send(chatForm)" ng-disabled="!chatForm.$valid">Send</button>
+					</span>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

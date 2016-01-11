@@ -35,14 +35,17 @@ class SocketController {
 
 		this.getSocket().emit('init', {
 			users: [],
-			messages: [],
 		});
 
 		this.getSocket().broadcast.emit('user:join', this.getUser());
 	}
 
-	sendMessage(data) {
-		//TODO
+	sendMessage(message) {
+		//TODO add log
+		this.getSocket().broadcast.emit('send:message', {
+			user: this.getUser(),
+			text: message
+		});
 	}
 
 	sendCommand(data) {

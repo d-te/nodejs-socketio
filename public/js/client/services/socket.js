@@ -10,6 +10,7 @@ app.factory('SocketService', [
 		var factory = {
 			init: init,
 			getSocket: getSocket,
+			sendMessage: sendMessage,
 		};
 
 		function init() {
@@ -33,6 +34,10 @@ app.factory('SocketService', [
 				factory.init();
 			}
 			return socket;
+		}
+
+		function sendMessage(message) {
+			this.getSocket().emit('send:message', message);
 		}
 
 		return factory;

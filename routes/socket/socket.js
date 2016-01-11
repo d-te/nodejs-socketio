@@ -15,10 +15,6 @@ module.exports = function (socket) {
 
 	socket.on('send:message', function (data) {
 		controller.sendMessage(data);
-/*		socket.broadcast.emit('send:message', {
-			user: name,
-			text: data.message
-		});*/
 	});
 
 	socket.on('send:command', function (data) {
