@@ -11,17 +11,7 @@ var userRepository = new Repository(User);
 module.exports = function (socket) {
 	var controller = new Controller(userRepository, socket, clientsRepository);
 
-	socket.emit('init', {
-		'message': 'hi'
-	});
-
-	/*socket.broadcast.emit('user:join', {
-		name: name
-	});*/
-
-	socket.on('user:login', function (user) {
-		controller.login(user);
-	});
+	controller.connect();
 
 	socket.on('send:message', function (data) {
 		controller.sendMessage(data);

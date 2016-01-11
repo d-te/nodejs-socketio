@@ -6,8 +6,8 @@ app.controller('AuthController', [
 	'$location',
 	'localStorageService',
 	'AuthService',
-	'SocketService',
-	function($scope, $rootScope, $location, localStorageService, AuthService, SocketService){
+	'SocketListener',
+	function($scope, $rootScope, $location, localStorageService, AuthService, SocketListener){
 		$scope.user = localStorageService.get('user') || {};
 
 		$scope.login = function(form) {
@@ -17,7 +17,7 @@ app.controller('AuthController', [
 					.then(function(user){
 							$rootScope.loggedUser = user;
 
-							SocketService.init();
+							SocketListener.init();
 
 							$location.path('/chat');
 						},

@@ -9,6 +9,7 @@ var app = angular.module(
 
 		'ChatApp.AuthService',
 		'ChatApp.SocketService',
+		'ChatApp.SocketListener',
 
 		'ChatApp.AuthController',
 		'ChatApp.ChatController',

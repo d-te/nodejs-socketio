@@ -10,6 +10,7 @@ class SocketController {
 		this._socket = socket;
 		this._clientsRepository = clientsRepository;
 		this.validator = new NodeValidator(validator);
+		this._user = this.getSocket().request.session.loggedUser;
 	}
 
 	getUserRepository() {
@@ -24,12 +25,20 @@ class SocketController {
 		return this._socket;
 	}
 
-	content(socket) {
-		//TODO
+	getUser() {
+		return this._user;
 	}
 
-	login(data) {
-		//TODO
+	connect() {
+
+		this.getClientsRepository().addClient(this.getSocket(), this.getUser());
+
+		this.getSocket().emit('init', {
+			users: [],
+			messages: [],
+		});
+
+		this.getSocket().broadcast.emit('user:join', this.getUser());
 	}
 
 	sendMessage(data) {
@@ -45,7 +54,9 @@ class SocketController {
 	}
 
 	disconnect() {
-		//TODO
+		this.getClientsRepository().removeClient(this.getSocket());
+
+		this.getSocket().broadcast.emit('user:left', this.getUser());
 	}
 }
 

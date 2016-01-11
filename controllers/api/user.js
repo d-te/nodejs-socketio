@@ -76,7 +76,7 @@ class UserController {
 	create(req, res, next) {
 		this.validator.check(req, {
 			'body.email': ['isNotEmptyString', 'isEmail'],
-			'query.name': ['isNotEmptyString', 'isTypeString'],
+			'body.name': ['isNotEmptyString', 'isTypeString'],
 		});
 		if (this.validator.errors) {
 			return res.status(400).json(this.validator.errors);
@@ -100,7 +100,7 @@ class UserController {
 		this.validator.check(req, {
 			'params.id': ['isMongoId'],
 			'body.email': ['isNotEmptyString', 'isEmail'],
-			'query.name': ['isNotEmptyString', 'isTypeString'],
+			'body.name': ['isNotEmptyString', 'isTypeString'],
 		});
 		if (this.validator.errors) {
 			return res.status(400).json(this.validator.errors);

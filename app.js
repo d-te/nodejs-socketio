@@ -1,4 +1,5 @@
 var express = require('express');
+var session = require('express-session');
 var path = require('path');
 var favicon = require('serve-favicon');
 var cookieParser = require('cookie-parser');
@@ -12,6 +13,12 @@ var routeConfigurer = require('./routes/routes_config');
 var app = express();
 app.locals.config = config;
 
+app.sessionMiddleware = session({
+	secret: config.session.secret,
+	resave: false,
+	saveUninitialized: true
+});
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -24,6 +31,7 @@ app.use(cookieParser());
 app.use(require('less-middleware')(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/libs',  express.static(__dirname + '/bower_components'));
+app.use(app.sessionMiddleware);
 
 mongoose.connect(config.db);
 

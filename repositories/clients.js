@@ -16,21 +16,21 @@ class Repository {
 		return _.findWhere(this.getClients(), { id: id });
 	}
 
-	getClientByUserId(id) {
-		return _.findWhere(this.getClients(), { userId: id });
+	getClientsByUserId(id) {
+		return _.where(this.getClients(), { userId: id });
 	}
 
-	addClient(client, user) {
+	addClient(socket, user) {
 		this._clients.push({
-			id: client.id,
-			userId: user.id,
-			client: client,
+			id: socket.id,
+			userId: user._id,
+			socket: socket,
 			user: user
 		});
 	}
 
-	removeClient(id) {
-		this._clients = _.reject(this._clients, function(item){ return item.id === id; });
+	removeClient(socket) {
+		this._clients = _.reject(this._clients, function(item){ return item.id === socket.id; });
 	}
 }
 
