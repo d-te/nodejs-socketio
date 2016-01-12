@@ -30,15 +30,15 @@ var app = angular.module(
 				controller: 'AuthController'
 			}).
 			when('/chat', {
-				templateUrl: '/partials/chat.html',
+				templateUrl: '/partials/client/chat.html',
 				controller: 'ChatController'
 			}).
 			when('/actions', {
-				templateUrl: '/partials/actions.html',
+				templateUrl: '/partials/client/actions.html',
 				controller: 'ActionsController'
 			}).
 			when('/components', {
-				templateUrl: '/partials/components.html',
+				templateUrl: '/partials/client/components.html',
 				controller: 'ComponentsController'
 			}).
 			otherwise({
