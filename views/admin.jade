@@ -1,5 +1,25 @@
-extends layout
-
-block content
-  h1= title
-  p Welcome to #{title}
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/build/css/style.min.css')
+    script(src='/socket.io/socket.io.js')
+    script(src='/libs/angular/angular.min.js')
+    script(src='/libs/angular-resource/angular-resource.min.js')
+    script(src='/libs/angular-route/angular-route.min.js')
+    script(src='/libs/angular-sanitize/angular-sanitize.min.js')
+    script(src='/libs/angular-socket-io/socket.min.js')
+    script(src='/libs/angular-local-storage/dist/angular-local-storage.js')
+    script(src='/js/services/auth.js')
+    script(src='/js/services/log.js')
+    script(src='/js/services/socket.js')
+    script(src='/js/services/socketListener.js')
+    script(src='/js/controllers/auth.js')
+    script(src='/js/controllers/admin/chat.js')
+    script(src='/js/controllers/admin/commands.js')
+    script(src='/js/controllers/admin/actions.js')
+    script(src='/js/controllers/admin/users.js')
+    script(src='/js/admin-app.js')
+  body(ng-app="ChatApp")
+    div.container
+        ng-view
