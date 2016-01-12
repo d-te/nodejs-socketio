@@ -6,6 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var config = require('./configs/config');
 var mongoose = require('mongoose');
+var logger = require('./utils/logger');
 
 var models = require('./models/models');
 var routeConfigurer = require('./routes/routes_config');

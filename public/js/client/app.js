@@ -8,6 +8,7 @@ var app = angular.module(
 		'LocalStorageModule',
 
 		'ChatApp.AuthService',
+		'ChatApp.LogService',
 		'ChatApp.SocketService',
 		'ChatApp.SocketListener',
 

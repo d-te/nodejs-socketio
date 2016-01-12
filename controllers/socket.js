@@ -2,6 +2,7 @@
 var _ = require('underscore');
 var NodeValidator = require('pure-validator-node');
 var validator = require('pure-validator');
+var logger = require('../utils/logger');
 
 class SocketController {
 
@@ -45,7 +46,8 @@ class SocketController {
 	}
 
 	sendMessage(message) {
-		//TODO add log
+		logger.message(message, { author: this.getUser()._id });
+
 		this.getSocket().broadcast.emit('send:message', {
 			user: this.getUser(),
 			text: message
@@ -57,8 +59,8 @@ class SocketController {
 	}
 
 	sendStatistics(data) {
-		//TODO add log
-		data._user = this.getUser()._id;
+		logger.statistics(data, { author: this.getUser()._id });
+		data._user = this.getUser()._id ;
 		this
 			.getStatisticsRepository()
 			.createEntity(data);

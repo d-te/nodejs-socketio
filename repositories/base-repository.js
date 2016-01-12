@@ -53,8 +53,14 @@ class BaseRepository {
 
 	getEntities(criterias, limit, offset, order) {
 		var self = this;
-		limit = parseInt(limit) || 10;
-		offset = parseInt(offset) || 0;
+
+		if (limit < 0) {
+			limit = 10;
+		}
+		if (offset < 0) {
+			offset = 0
+		}
+
 		var conditions = this.processCriterias(criterias);
 		var orderCondition = this.processOrder(order);
 
