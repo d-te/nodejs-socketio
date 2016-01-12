@@ -11,6 +11,7 @@ var app = angular.module(
 		'ChatApp.LogService',
 		'ChatApp.SocketService',
 		'ChatApp.SocketListener',
+		'ChatApp.UserService',
 
 		'ChatApp.AuthController',
 		'ChatApp.ChatController',
