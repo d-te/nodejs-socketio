@@ -8,26 +8,7 @@ app.controller('ChatController', [
 	function($scope, $rootScope, SocketService, SocketListener) {
 		$scope.user     = $rootScope.loggedUser;
 		$scope.message  = '';
-		$scope.messages = [];
-
-		SocketListener.addEventListener('onUserJoin', function(user){
-			$scope.messages.push({
-				text: user.name + ' has joined'
-			});
-		});
-
-		SocketListener.addEventListener('onUserLeft', function(user){
-			$scope.messages.push({
-				text: user.name + ' has left'
-			});
-		});
-
-		SocketListener.addEventListener('onSendMessage', function(data){
-			$scope.messages.push({
-				user: data.user,
-				text: data.text
-			});
-		});
+		$scope.messages = SocketListener.messages;
 
 		$scope.send = function(form) {
 			if (form.$valid) {
