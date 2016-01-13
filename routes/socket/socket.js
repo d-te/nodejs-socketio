@@ -4,14 +4,18 @@ var mongoose = require('mongoose');
 var Statistics = mongoose.model('Statistics');
 var StatisticsRepository = require('../../repositories/statistics').Repository;
 
+var User = mongoose.model('User');
+var UserRepository = require('../../repositories/user').Repository;
+
 var Controller = require('../../controllers/socket').Controller;
 var ClientsRepository = require('../../repositories/clients').Repository;
 
 var clientsRepository = new ClientsRepository();
 var statisticsRepository = new StatisticsRepository(Statistics);
+var userRepository = new UserRepository(User);
 
 module.exports = function (socket) {
-	var controller = new Controller(statisticsRepository, socket, clientsRepository);
+	var controller = new Controller(userRepository, statisticsRepository, socket, clientsRepository);
 
 	controller.connect();
 

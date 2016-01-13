@@ -6,12 +6,17 @@ var logger = require('../utils/logger');
 
 class SocketController {
 
-	constructor(statisticsRepository, socket, clientsRepository) {
+	constructor(userRepository, statisticsRepository, socket, clientsRepository) {
+		this._userRepository = userRepository;
 		this._statisticsRepository = statisticsRepository;
 		this._socket = socket;
 		this._clientsRepository = clientsRepository;
 		this.validator = new NodeValidator(validator);
 		this._user = this.getSocket().request.session.loggedUser;
+	}
+
+	getUserRepository() {
+		return this._userRepository;
 	}
 
 	getStatisticsRepository() {
@@ -55,6 +60,8 @@ class SocketController {
 			user: this.getUser(),
 			text: message
 		});
+
+		this.getUserRepository().updateActionTime(this.getUser()._id);
 	}
 
 	sendMessageToUser(data) {
@@ -67,6 +74,8 @@ class SocketController {
 				text: data.message
 			});
 		};
+
+		this.getUserRepository().updateActionTime(this.getUser()._id);
 	}
 
 	sendCommand(data) {
@@ -80,18 +89,25 @@ class SocketController {
 				command: data.command
 			});
 		};
+
+		this.getUserRepository().updateActionTime(this.getUser()._id);
 	}
 
 	sendStatistics(data) {
 		logger.statistics(data, { author: this.getUser()._id });
+
 		data._user = this.getUser()._id ;
+
 		this
 			.getStatisticsRepository()
 			.createEntity(data);
+
+		this.getUserRepository().updateActionTime(this.getUser()._id);
 	}
 
 	disconnect() {
 		if (this.getUser()) {
+			this.getUserRepository().updateActionTime(this.getUser()._id);
 			this.getClientsRepository().removeClient(this.getSocket());
 
 			var userClients = this.getClientsRepository().getClientsByUserId(this.getUser()._id);

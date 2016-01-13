@@ -35,15 +35,25 @@ class AuthController {
 						.getRepository()
 						.createEntity(entity)
 						.then(function(user){
-							req.session.loggedUser = user;
-							res.status(200).json(user);
+							self
+								.getRepository()
+								.updateVisitTime(user._id)
+								.then(function(){
+									req.session.loggedUser = user;
+									res.status(200).json(user);
+								});
 						})
 						.catch(function(err){
 							res.status(400).json(err.message);
 						});
 				} else {
-					req.session.loggedUser = user;
-					res.status(200).json(user);
+					self
+						.getRepository()
+						.updateVisitTime(user._id)
+						.then(function(){
+							req.session.loggedUser = user;
+							res.status(200).json(user);
+						});
 				}
 			})
 			.catch(function(err){

@@ -98,7 +98,7 @@ class BaseRepository {
 		return result;
 	}
 
-	createEntity(fields, cb) {
+	createEntity(fields) {
 		var self = this;
 		var promise = new Promise(function (resolve, reject) {
 			self
@@ -115,7 +115,7 @@ class BaseRepository {
 		return promise;
 	}
 
-	updateEntity(id, fields, cb) {
+	updateEntity(id, fields) {
 		var self = this;
 		var promise = new Promise(function (resolve, reject) {
 			fields = _.omit(fields, ['id', 'createdAt', 'updatedAt']);
@@ -140,7 +140,7 @@ class BaseRepository {
 
 	}
 
-	destroyEntity(id, cb) {
+	destroyEntity(id) {
 		var self = this;
 		var promise = new Promise(function (resolve, reject) {
 			self

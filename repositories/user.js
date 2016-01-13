@@ -24,6 +24,16 @@ class UserRepository extends BaseRepository {
 
 		return promise;
 	}
+
+	updateVisitTime(id) {
+		var now = new Date();
+		return this.updateEntity(id, {lastVisitAt: now});
+	}
+
+	updateActionTime(id) {
+		var now = new Date();
+		return this.updateEntity(id, {lastActionAt: now});
+	}
 }
 
 module.exports.Repository = UserRepository;
