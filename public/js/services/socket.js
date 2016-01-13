@@ -14,6 +14,7 @@ app.factory('SocketService', [
 			sendMessageToUser: sendMessageToUser,
 			sendStatistics: sendStatistics,
 			sendEvent: sendEvent,
+			sendCommand: sendCommand,
 		};
 
 		function init() {
@@ -50,6 +51,15 @@ app.factory('SocketService', [
 			};
 
 			this.getSocket().emit('send:message:to:user', data);
+		}
+
+		function sendCommand(command, userId) {
+			var data = {
+				user: userId,
+				command: command,
+			};
+
+			this.getSocket().emit('send:command', data);
 		}
 
 		function sendStatistics(data) {

@@ -2,6 +2,31 @@
 
 <div class="row">
 	<div class="col-md-8 col-md-offset-2">
-		commands
+		<div class="account-wall chat">
+			<h2>Commands : {{user.name}} ({{user.email}})</h2>
+			<div class="overflowable">
+				<p ng-repeat="c in commands" >
+					<span ng-if="c.user" class="user">{{c.user.name}}:</span>
+					<span ng-if="c.recipient" class="user">:{{c.recipient.name}}:</span>
+					{{c.command}}
+				</p>
+			</div>
+			<form name="chatForm" class="form-horizontal" novalidate>
+				<select
+					class="form-control"
+					ng-model="selectedUser"
+					ng-options="user.name for user in users"
+					required
+					>
+					<option value="">-- Select a user --</option>
+				</select>
+				<div class="input-group">
+					<input type="text" class="form-control" required ng-model="command">
+					<span class="input-group-btn">
+						<button class="btn btn-primary" type="button" ng-click="send(chatForm)" ng-disabled="!chatForm.$valid">Send</button>
+					</span>
+				</div>
+			</form>
+		</div>
 	</div>
 </div>

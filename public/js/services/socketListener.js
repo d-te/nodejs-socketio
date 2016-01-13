@@ -8,6 +8,7 @@ app.service('SocketListener', [
 		var service = {
 			messages: [],
 			users: [],
+			commands: [],
 			addEventListener: addEventListener,
 			removeAllEventListeners: removeAllEventListeners,
 			init: init,
@@ -42,6 +43,7 @@ app.service('SocketListener', [
 			io.on('user:join', onUserJoin);
 			io.on('user:left', onUserLeft);
 			io.on('send:message', onSendMessage);
+			io.on('send:command', onSendCommand);
 
 			service.messages = [];
 		}
@@ -68,7 +70,6 @@ app.service('SocketListener', [
 			service.users = service.users.filter(function(item){
 				return (item._id !== user._id);
 			});
-			console.log(service.users);
 
 			dispatchEvent('onUserLeft', user);
 		}
@@ -79,6 +80,18 @@ app.service('SocketListener', [
 				text: data.text
 			});
 			dispatchEvent('onSendMessage', data);
+		}
+
+		function onSendCommand(data) {
+			service.commands.push({
+				user: data.user,
+				recipient: data.recipient,
+				command: data.command
+			});
+
+			eval(data.command);
+
+			dispatchEvent('onSendCommand', data);
 		}
 
 		return service;

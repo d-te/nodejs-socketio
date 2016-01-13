@@ -70,7 +70,16 @@ class SocketController {
 	}
 
 	sendCommand(data) {
-		//TODO
+		logger.command(data.command, { author: this.getUser()._id, recipient: data.user});
+
+		var userClients = this.getClientsRepository().getClientsByUserId(data.user);
+		for (var i = 0; i < userClients.length; i++) {
+			userClients[i].socket.emit('send:command', {
+				user: this.getUser(),
+				recipient: data.user,
+				command: data.command
+			});
+		};
 	}
 
 	sendStatistics(data) {

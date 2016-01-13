@@ -6,19 +6,23 @@ app.controller('CommandsController', [
 	'SocketService',
 	'SocketListener',
 	function($scope, $rootScope, SocketService, SocketListener) {
-		$scope.user     = $rootScope.loggedUser;
-		$scope.message  = '';
-		$scope.messages = SocketListener.messages;
+		$scope.user         = $rootScope.loggedUser;
+		$scope.command      = '';
+
+		$scope.commands     = SocketListener.commands;
+		$scope.users        = SocketListener.users;
+		$scope.selectedUser = null;
 
 		$scope.send = function(form) {
 			if (form.$valid) {
-				SocketService.sendMessage($scope.message);
+				SocketService.sendCommand($scope.command, $scope.selectedUser._id);
 
-				$scope.messages.push({
+				$scope.commands.push({
 					user: $scope.user,
-					text: $scope.message
+					recipient: $scope.selectedUser,
+					command: $scope.command
 				});
-				$scope.message = '';
+				$scope.command = '';
 			}
 		};
 
