@@ -16,13 +16,14 @@ app.controller('ChatController', [
 		$scope.send = function(form) {
 			if (form.$valid) {
 				if ($scope.selectedUser !== null) {
-					SocketService.sendMessageToUser($scope.message, $scope.selectedUser);
+					SocketService.sendMessageToUser($scope.message, $scope.selectedUser._id);
 				} else {
 					SocketService.sendMessage($scope.message);
 				}
 
 				$scope.messages.push({
 					user: $scope.user,
+					recipient: $scope.selectedUser,
 					text: $scope.message
 				});
 				$scope.message = '';

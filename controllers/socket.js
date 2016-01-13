@@ -60,7 +60,7 @@ class SocketController {
 	sendMessageToUser(data) {
 		logger.message(data.message, { author: this.getUser()._id, recipient: data.user});
 
-		var userClients = this.getClientsRepository().getClientsByUserId(this.getUser()._id);
+		var userClients = this.getClientsRepository().getClientsByUserId(data.user);
 		for (var i = 0; i < userClients.length; i++) {
 			userClients[i].socket.emit('send:message', {
 				user: this.getUser(),

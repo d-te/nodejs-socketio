@@ -11,6 +11,7 @@ app.factory('SocketService', [
 			init: init,
 			getSocket: getSocket,
 			sendMessage: sendMessage,
+			sendMessageToUser: sendMessageToUser,
 			sendStatistics: sendStatistics,
 			sendEvent: sendEvent,
 		};

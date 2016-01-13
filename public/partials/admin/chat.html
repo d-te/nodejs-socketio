@@ -6,14 +6,16 @@
 			<h2>{{user.name}} ({{user.email}})</h2>
 			<div class="overflowable">
 				<p ng-repeat="m in messages" >
-					<span ng-if="m.user" class="user">{{m.user.name}}:</span>{{m.text}}
+					<span ng-if="m.user" class="user">{{m.user.name}}:</span>
+					<span ng-if="m.recipient" class="user">:{{m.recipient.name}}:</span>
+					{{m.text}}
 				</p>
 			</div>
 			<form name="chatForm" class="form-horizontal" novalidate>
 				<select
 					class="form-control"
 					ng-model="selectedUser"
-					ng-options="user._id as user.name for user in users"
+					ng-options="user.name for user in users"
 					>
 					<option value="">-- All --</option>
 				</select>
