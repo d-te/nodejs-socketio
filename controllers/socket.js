@@ -39,10 +39,13 @@ class SocketController {
 		this.getClientsRepository().addClient(this.getSocket(), this.getUser());
 
 		this.getSocket().emit('init', {
-			users: [],
+			users: this.getClientsRepository().getUsers(),
 		});
 
-		this.getSocket().broadcast.emit('user:join', this.getUser());
+		var userClients = this.getClientsRepository().getClientsByUserId(this.getUser()._id);
+		if (userClients.length === 1) {
+			this.getSocket().broadcast.emit('user:join', this.getUser());
+		}
 	}
 
 	sendMessage(message) {
@@ -52,6 +55,18 @@ class SocketController {
 			user: this.getUser(),
 			text: message
 		});
+	}
+
+	sendMessageToUser(data) {
+		logger.message(data.message, { author: this.getUser()._id, recipient: data.user});
+
+		var userClients = this.getClientsRepository().getClientsByUserId(this.getUser()._id);
+		for (var i = 0; i < userClients.length; i++) {
+			userClients[i].socket.emit('send:message', {
+				user: this.getUser(),
+				text: data.message
+			});
+		};
 	}
 
 	sendCommand(data) {
@@ -69,7 +84,11 @@ class SocketController {
 	disconnect() {
 		if (this.getUser()) {
 			this.getClientsRepository().removeClient(this.getSocket());
-			this.getSocket().broadcast.emit('user:left', this.getUser());
+
+			var userClients = this.getClientsRepository().getClientsByUserId(this.getUser()._id);
+			if (userClients.length === 0) {
+				this.getSocket().broadcast.emit('user:left', this.getUser());
+			}
 		}
 	}
 }

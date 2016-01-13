@@ -46,7 +46,7 @@ var app = angular.module(
 			});
 		}
 	])
-	.run( function($rootScope, $location) {
+	.run( function($rootScope, $location, SocketService, $window) {
 		$rootScope.$on( '$routeChangeStart', function(event, next, current) {
 			if (!$rootScope.loggedUser) {
 				if ( next.$$route.templateUrl === 'partials/login.html' ) {
@@ -55,4 +55,8 @@ var app = angular.module(
 				}
 			}
 		});
+
+		$window.onbeforeunload = function() {
+			SocketService.getSocket().disconnect();
+		};
 	});

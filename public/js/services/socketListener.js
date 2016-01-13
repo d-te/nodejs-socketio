@@ -7,6 +7,7 @@ app.service('SocketListener', [
 
 		var service = {
 			messages: [],
+			users: [],
 			addEventListener: addEventListener,
 			removeAllEventListeners: removeAllEventListeners,
 			init: init,
@@ -46,13 +47,16 @@ app.service('SocketListener', [
 		}
 
 		function onInit(data) {
-			//TODO get list of online users
+			service.users = data.users;
 		}
 
 		function onUserJoin(user) {
 			service.messages.push({
 				text: user.name + ' has joined'
 			});
+
+			service.users.push(user);
+
 			dispatchEvent('onUserJoin', user);
 		}
 
@@ -60,6 +64,12 @@ app.service('SocketListener', [
 			service.messages.push({
 				text: user.name + ' has left'
 			});
+
+			service.users = service.users.filter(function(item){
+				return (item._id !== user._id);
+			});
+			console.log(service.users);
+
 			dispatchEvent('onUserLeft', user);
 		}
 

@@ -19,6 +19,10 @@ module.exports = function (socket) {
 		controller.sendMessage(data);
 	});
 
+	socket.on('send:message:to:user', function (data) {
+		controller.sendMessageToUser(data);
+	});
+
 	socket.on('send:command', function (data) {
 		controller.sendCommand(data);
 	});

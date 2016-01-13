@@ -6,13 +6,20 @@ app.controller('ChatController', [
 	'SocketService',
 	'SocketListener',
 	function($scope, $rootScope, SocketService, SocketListener) {
-		$scope.user     = $rootScope.loggedUser;
-		$scope.message  = '';
-		$scope.messages = SocketListener.messages;
+		$scope.user         = $rootScope.loggedUser;
+		$scope.message      = '';
+
+		$scope.messages     = SocketListener.messages;
+		$scope.users        = SocketListener.users;
+		$scope.selectedUser = null;
 
 		$scope.send = function(form) {
 			if (form.$valid) {
-				SocketService.sendMessage($scope.message);
+				if ($scope.selectedUser !== null) {
+					SocketService.sendMessageToUser($scope.message, $scope.selectedUser);
+				} else {
+					SocketService.sendMessage($scope.message);
+				}
 
 				$scope.messages.push({
 					user: $scope.user,

@@ -20,6 +20,15 @@ class Repository {
 		return _.where(this.getClients(), { userId: id });
 	}
 
+	getUsers() {
+		var users = _.pluck(this._clients, 'user');
+		users = _.uniq(users, function(user) {
+			return user._id;
+		});
+
+		return users;
+	}
+
 	addClient(socket, user) {
 		this._clients.push({
 			id: socket.id,

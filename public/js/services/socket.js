@@ -42,6 +42,15 @@ app.factory('SocketService', [
 			this.getSocket().emit('send:message', message);
 		}
 
+		function sendMessageToUser(message, userId) {
+			var data = {
+				user: userId,
+				message: message,
+			};
+
+			this.getSocket().emit('send:message:to:user', data);
+		}
+
 		function sendStatistics(data) {
 			this.getSocket().emit('send:statistics', data);
 		}
